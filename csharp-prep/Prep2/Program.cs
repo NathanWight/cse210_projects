@@ -22,9 +22,9 @@ if (lastDigit<7 && lastDigit> 3)
         
         if (percent >=90)
         { 
-            if (percent>=100)
+            if (percent>=95)
             {
-                gradeLevel = "+";
+                gradeLevel = null;
             }
             grade = "A";
 
@@ -44,6 +44,6 @@ if (lastDigit<7 && lastDigit> 3)
         else{
             grade = "F";
         }
-        Console.WriteLine(gradeLevel + grade);
+        Console.WriteLine(grade + gradeLevel);
     }
 }
