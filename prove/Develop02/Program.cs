@@ -1,5 +1,4 @@
-using System;
-using System.IO.Enumeration;
+using System.Net;
 using Develop02;
 
 
@@ -28,6 +27,12 @@ class Program
             Console.WriteLine("[5] Quit");
             //Store the users input  
             int choice = Convert.ToInt32(Console.ReadLine()); 
+            // Try and Catch the user choice to make sure it is within range
+            
+            
+            
+
+            
     
     // start loop and run until user selects 5 to quit
     while (choice != 5) 
@@ -108,6 +113,7 @@ class Program
         Console.WriteLine("[5] Quit");
         //Store the users input  
         choice = Convert.ToInt32(Console.ReadLine()); 
+        
     }
        
     }
