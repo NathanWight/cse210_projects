@@ -1,6 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Threading;
+
 
 public class ListingActivity : Activity
 {
@@ -15,11 +13,12 @@ public class ListingActivity : Activity
     {
         _prompts = new List<string>
         {
-            "--- Who are people that you appreciate? ---",
-            "--- What are personal strengths of yours? ---",
-            "--- Who are people that you have helped this week? ---",
-            "--- When have you felt the Holy Ghost this month? ---",
-            "--- Who are some of your personal heroes? ---"
+        "--- Who are people that inspire you and why? ---",
+        "--- What are some achievements you're proud of and why? ---",
+        "--- Reflect on moments that brought you joy recently. ---",
+        "--- List things you are grateful for in your life. ---",
+        "--- Think about skills or hobbies you want to learn and why. ---"
+    
         };
     }
 

@@ -1,15 +1,11 @@
-using System;
 using System.Diagnostics;
 
 public class Activity
 {
-    private string _startingMessage;
-    private string _endingMessage;
-    private string _activityDescription;
-    private string _activityName;
-    private int _spinnerCounter = 0;
-    private int _userSessionLengthInput = 0;
-
+    private int  _sessionLength = 0, _spinner = 0;
+    
+    private string _message, _endingMessage,  _activityDescription, _activityName;
+    
     public Activity(string activityName, string activityDescription)
     {
         _activityName = activityName;
@@ -28,8 +24,8 @@ public class Activity
     }
     public void DisplayStartingMessage()
     {
-        _startingMessage = $"Welcome to the {_activityName}.";
-        Console.WriteLine(_startingMessage + "\n");
+        _message = $"Welcome to the {_activityName}.";
+        Console.WriteLine(_message + "\n");
     }
 
     public void DisplayDescription()
@@ -39,7 +35,7 @@ public class Activity
 
     public void DisplayEndingMessage()
     {
-        _endingMessage = $"You have completed {_userSessionLengthInput} seconds of the {_activityName}.";
+        _endingMessage = $"You have completed {_sessionLength} seconds of the {_activityName}.";
 
         Console.WriteLine("\nWell done!");
         DisplaySpinner(3);
@@ -55,8 +51,8 @@ public class Activity
 
         while (stopwatch.ElapsedMilliseconds / 1000 < numSecondsToRun)
         {
-            _spinnerCounter++;
-            switch (_spinnerCounter % 4)
+            _spinner++;
+            switch (_spinner % 4)
             {
                 case 0: Console.Write("/"); break;
                 case 1: Console.Write("-"); break;
@@ -73,7 +69,7 @@ public class Activity
 
     public int GetUserSessionLengthInput()
     {
-        return _userSessionLengthInput;
+        return _sessionLength;
     }
 
     public virtual void RunActivityParentStart()
@@ -87,5 +83,5 @@ public class Activity
         DisplayEndingMessage();
     }
 
-    // Additional methods for getting session length and getting ready
+    // Additional methods for getting sessi
 }

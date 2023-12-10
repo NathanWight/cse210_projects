@@ -1,6 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+
 
 public class ReflectingActivity : Activity
 {
@@ -18,24 +16,26 @@ public class ReflectingActivity : Activity
     {
         _prompts = new List<string>
         {
-            "--- Think of a time when you stood up for someone else. ---",
-            "--- Think of a time when you did something really difficult. ---",
-            "--- Think of a time when you helped someone in need. ---",
-            "--- Think of a time when you did something truly selfless. ---"
+        "--- Think of a time when you showed resilience in a challenging situation. ---",
+        "--- Recall a moment when you accomplished something you once thought was impossible. ---",
+        "--- Reflect on a time when you helped someone without expecting anything in return. ---",
+        "--- Consider a situation where you faced fear and overcame it. ---",
+        "--- Remember a time when you learned a valuable lesson from a mistake. "
         };
 
         _questions = new List<string> 
         {
-            "Why was this experience meaningful to you?",
-            "Have you ever done anything like this before?",
-            "How did you get started?",
-            "How did you feel when it was complete?",
-            "What made this time different than other times when you were not as successful?",
-            "What is your favorite thing about this experience?",
-            "What could you learn from this experience that applies to other situations?",
-            "What did you learn about yourself through this experience?",
-            "How can you keep this experience in mind in the future?"
-        };
+           "What strengths did you discover within yourself during that situation?",
+        "How did that experience change your perspective on challenges?",
+        "What strategies did you use to navigate through that difficult time?",
+        "In what ways did that experience shape your future decisions?",
+        "What advice would you give to someone facing a similar situation?",
+        "How did that experience contribute to your personal growth?",
+        "What emotions were predominant during that situation, and how did you manage them?",
+        "In what ways did that experience influence your relationships with others?",
+        "How can you apply the lessons learned from that situation to other aspects of your life?"
+    };
+        
     }
 
     public void RunReflectingActivity()
