@@ -1,64 +1,91 @@
 using System;
-using System.Threading;
+using System.Diagnostics;
 
 public class Activity
 {
-    protected int _duration;
-    protected string _description;
-    protected string _activityName;
-    protected int _initialPauseDuration;
-    protected int _finalPauseDuration;
+    private string _startingMessage;
     private string _endingMessage;
+    private string _activityDescription;
+    private string _activityName;
+    private int _spinnerCounter = 0;
+    private int _userSessionLengthInput = 0;
 
-    public Activity(int duration, string description, string activityName, int initialPauseDuration, int finalPauseDuration, string endingMessage)
+    public Activity(string activityName, string activityDescription)
     {
-        _duration = duration;
-        _description = description;
         _activityName = activityName;
-        _initialPauseDuration = initialPauseDuration;
-        _finalPauseDuration = finalPauseDuration;
-        _endingMessage = endingMessage;
+        _activityDescription = activityDescription;
     }
-
-    public void DisplayStartingMessage(string activityName, string message)
+ public virtual void DisplayCountdown(int numSecondsToRun)
     {
-        _description = message;
-        _activityName = activityName;
-        Console.Clear();
-        Console.WriteLine($"Welcome to the {_activityName} Activity.");
-        Console.WriteLine();
-        Console.WriteLine(_description);
-        Console.WriteLine();
-        Console.WriteLine("How long in seconds would you like your session?");
-        _duration = Convert.ToInt32(Console.ReadLine());
-    }
-
-    public void DisplayHoldAnimation(int pauseSeconds)
-    {
-        string[] spinner = { "-", "|", "/" };
-        for (int i = 0; i < pauseSeconds; i++)
+        for (int i = numSecondsToRun; i >= 1; i--)
         {
-            Console.Write(spinner[i % spinner.Length]);
-            Thread.Sleep(500);
-            Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
+            Console.Write($"You may begin in: {i} ");
+            Console.SetCursorPosition(0, Console.CursorTop);
+            Thread.Sleep(1000);
+            Console.Write("\b\b\b\b\b\b\b\b\b\b\b");
         }
+        Console.WriteLine("Begin!");
+    }
+    public void DisplayStartingMessage()
+    {
+        _startingMessage = $"Welcome to the {_activityName}.";
+        Console.WriteLine(_startingMessage + "\n");
     }
 
-    public void InitialPause(int duration = 10)
+    public void DisplayDescription()
     {
-        DisplayHoldAnimation(duration);
+        Console.WriteLine(_activityDescription + "\n");
     }
 
-    public void DisplayEndingMessage(string activityName)
+    public void DisplayEndingMessage()
     {
+        _endingMessage = $"You have completed {_userSessionLengthInput} seconds of the {_activityName}.";
+
+        Console.WriteLine("\nWell done!");
+        DisplaySpinner(3);
         Console.WriteLine(_endingMessage);
-        DisplayHoldAnimation(10);
+        DisplaySpinner(5);
+        Console.Clear();
     }
 
-    public void StartActivity(string activityName, string description)
+    public void DisplaySpinner(int numSecondsToRun)
     {
-        Console.Clear();
-        InitialPause();
-        DisplayStartingMessage(activityName, description);
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
+
+        while (stopwatch.ElapsedMilliseconds / 1000 < numSecondsToRun)
+        {
+            _spinnerCounter++;
+            switch (_spinnerCounter % 4)
+            {
+                case 0: Console.Write("/"); break;
+                case 1: Console.Write("-"); break;
+                case 2: Console.Write("\\"); break;
+                case 3: Console.Write("|"); break;
+            }
+            Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
+            Thread.Sleep(200);
+        }
+
+        Console.Write(" ");
     }
+    
+
+    public int GetUserSessionLengthInput()
+    {
+        return _userSessionLengthInput;
+    }
+
+    public virtual void RunActivityParentStart()
+    {
+        DisplayStartingMessage();
+        DisplayDescription();
+        Console.Clear();
+    }
+    public void RunActivityParentEnd()
+    {
+        DisplayEndingMessage();
+    }
+
+    // Additional methods for getting session length and getting ready
 }

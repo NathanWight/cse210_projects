@@ -1,72 +1,96 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
-public class ReflectionActivity : Activity
+public class ReflectingActivity : Activity
 {
-    private List<string> _promptsList = new List<string>();
-    private List<string> _questionsList = new List<string>()
-    {
-        "Why was this experience meaningful to you?",
-        "Have you ever done anything like this before?",
-        "How did you get started?",
-        "How did you feel when it was complete?",
-        "What made this time different than other times when you were not as successful?",
-        "What is your favorite thing about this experience?",
-        "What could you learn from this experience that applies to other situations?",
-        "What did you learn about yourself through this experience?",
-        "How can you keep this experience in mind in the future?"
-    };
+    private List<string> _prompts;
+    private List<string> _questions;
+    private Random _randomGenerator;
 
-    public ReflectionActivity(int duration, string description, string activityName, int initialPauseDuration, int finalPauseDuration, string endingMessage) : base(duration, description, activityName, initialPauseDuration, finalPauseDuration, endingMessage)
+    public ReflectingActivity() : base("Reflection Activity", "Reflect on times in your life when you have shown strength and resilience.")
     {
-        _promptsList.Add("Think of a time when you stood up for someone else.");
-        _promptsList.Add("Think of a time when you did something really difficult.");
-        _promptsList.Add("Think of a time when you helped someone in need.");
-        _promptsList.Add("Think of a time when you did something truly selfless.");
+        InitializePromptsAndQuestions();
+        _randomGenerator = new Random();
     }
 
-    public void StartReflectionActivity()
+    private void InitializePromptsAndQuestions()
     {
-        StartActivity(_activityName, _description);
-        Console.Clear();
-        Console.WriteLine("Get ready to start!");
+        _prompts = new List<string>
+        {
+            "--- Think of a time when you stood up for someone else. ---",
+            "--- Think of a time when you did something really difficult. ---",
+            "--- Think of a time when you helped someone in need. ---",
+            "--- Think of a time when you did something truly selfless. ---"
+        };
+
+        _questions = new List<string> 
+        {
+            "Why was this experience meaningful to you?",
+            "Have you ever done anything like this before?",
+            "How did you get started?",
+            "How did you feel when it was complete?",
+            "What made this time different than other times when you were not as successful?",
+            "What is your favorite thing about this experience?",
+            "What could you learn from this experience that applies to other situations?",
+            "What did you learn about yourself through this experience?",
+            "How can you keep this experience in mind in the future?"
+        };
+    }
+
+    public void RunReflectingActivity()
+    {
+        RunActivityParentStart();
+        DisplayPrompt();
+        DisplayQuestions();
+        RunActivityParentEnd();
+    }
+    
+
+    public virtual void DisplayPrompt()
+    {
+        Console.WriteLine("Consider the following: ");
         Console.WriteLine();
-        InitialPause();
-        Random random = new Random();
-        int randomIndex = random.Next(_promptsList.Count);
-        Console.WriteLine(_promptsList[randomIndex]);
-        _promptsList.RemoveAt(randomIndex);
-        InitialPause();
+
+        int randomIndex = _randomGenerator.Next(0, _prompts.Count);
+        Console.WriteLine(_prompts[randomIndex]);
         Console.WriteLine();
+
         Console.WriteLine("When you have something in mind, press enter to continue.");
         Console.ReadLine();
+    }    
+
+    private void DisplayQuestions()
+    {
+        Console.Clear();
         Console.WriteLine("Now ponder on each of the following questions as they relate to this experience.");
-        Countdown(_initialPauseDuration);
-        DateTime startTime = DateTime.Now;
-        DateTime endTime = startTime.AddSeconds(_duration);
-        
-        while (DateTime.Now < endTime)
+        Console.WriteLine();
+        DisplayCountdown(5);
+
+        int numQuestionsToShow = 4;
+        List<int> indexes = GenerateUniqueRandomIndexes(numQuestionsToShow, _questions.Count);
+
+        foreach (int index in indexes)
         {
-            Random randomQuestion = new Random();
-            int randomQuestionIndex = randomQuestion.Next(_questionsList.Count);
-            Console.WriteLine("> " + _questionsList[randomQuestionIndex]);
-            _questionsList.RemoveAt(randomQuestionIndex);
-            InitialPause(20);
+            Console.Write(_questions[index]);
+            DisplaySpinner(GetUserSessionLengthInput() / numQuestionsToShow);
             Console.WriteLine();
         }
-
-        Console.WriteLine("Well Done!");
-        InitialPause();
-        DisplayEndingMessage(_activityName);
     }
 
-    public void Countdown(int seconds)
+    private List<int> GenerateUniqueRandomIndexes(int count, int maxValue)
     {
-        for (int i = seconds; i >= 1; i--)
+        List<int> indexes = new List<int>();
+
+        while (indexes.Count < count)
         {
-            Console.Write(i + "...");
-            System.Threading.Thread.Sleep(1000);
+            int randomInt = _randomGenerator.Next(0, maxValue);
+            if (!indexes.Contains(randomInt))
+            {
+                indexes.Add(randomInt);
+            }
         }
-        Console.WriteLine();
+
+        return indexes;
     }
 }

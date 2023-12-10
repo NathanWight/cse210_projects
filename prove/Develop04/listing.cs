@@ -1,56 +1,60 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 public class ListingActivity : Activity
 {
-    private List<string> _promptsList = new List<string>();
-    private List<string> _responsesList = new List<string>();
+    private List<string> _prompts;
 
-    public ListingActivity(int duration, string description, string activityName, int initialPauseDuration, int finalPauseDuration, string endingMessage) : base(duration, description, activityName, initialPauseDuration, finalPauseDuration, endingMessage)
-    {   
-        _promptsList.Add("Who are people that you appreciate?");
-        _promptsList.Add("What are personal strengths of yours?");
-        _promptsList.Add("Who are people that you have helped this week?");
-        _promptsList.Add("When have you felt the Holy Ghost this month?");
-        _promptsList.Add("Who are some of your personal heroes?");
+    public ListingActivity() : base("Listing Activity", "Reflect on the good things in your life by listing as many things as you can in a certain area.")
+    {
+        InitializePrompts();
     }
 
-    public void StartListingActivity()
+    private void InitializePrompts()
     {
-        StartActivity(_activityName, _description);
-        Console.Clear();
-        Console.WriteLine("Get ready to start!");
-        InitialPause();
-        Console.WriteLine("List as many responses as you can to the following prompt: ");
-        Random random = new Random();
-        int randomIndex = random.Next(_promptsList.Count);
-        Console.WriteLine(_promptsList[randomIndex]);
-        _promptsList.RemoveAt(randomIndex);
-        InitialPause();
-        Console.WriteLine("You may begin in:");
-        Countdown(_initialPauseDuration);
+        _prompts = new List<string>
+        {
+            "--- Who are people that you appreciate? ---",
+            "--- What are personal strengths of yours? ---",
+            "--- Who are people that you have helped this week? ---",
+            "--- When have you felt the Holy Ghost this month? ---",
+            "--- Who are some of your personal heroes? ---"
+        };
+    }
+
+    public void RunListingActivity()
+    {
+        RunActivityParentStart();
+        DisplayPrompt();
+        ListingCounter();
+        RunActivityParentEnd();
+    }
+
+    private void DisplayPrompt()
+    {
+        Console.WriteLine("List as many responses as you can to the following prompt:");
+        Console.WriteLine();
+        int randomIndex = new Random().Next(0, _prompts.Count);
+        Console.WriteLine(_prompts[randomIndex]);
+        Console.WriteLine();
+    }
+
+    private void ListingCounter()
+    {
         DateTime startTime = DateTime.Now;
-        DateTime endTime = startTime.AddSeconds(_duration);
+        DateTime futureTime = startTime.AddSeconds(GetUserSessionLengthInput());
+        int count = 0;
 
-        while (DateTime.Now < endTime)
+        while (DateTime.Now < futureTime)
         {
-            Console.Write(">");
-            _responsesList.Add(Console.ReadLine());
+            Console.Write("> ");
+            Console.ReadLine();
+            count++;
         }
 
-        int lengthListedItems = _responsesList.Count;
-        Console.WriteLine($"You listed {lengthListedItems} items!");
         Console.WriteLine();
-        DisplayEndingMessage(_activityName);
-    }
-
-    public void Countdown(int seconds)
-    {
-        for (int i = seconds; i >= 1; i--)
-        {
-            Console.Write(i + "...");
-            System.Threading.Thread.Sleep(1000);
-        }
-        Console.WriteLine();
+        Console.WriteLine($"You listed {count} items.");
+        DisplaySpinner(5);
     }
 }

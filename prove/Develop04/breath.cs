@@ -1,40 +1,45 @@
 using System;
+using System.Threading;
 
 public class BreathingActivity : Activity
 {
-    private int _breathInSeconds;
-    private int _breatheOutSeconds;
-
-    public BreathingActivity(int duration, string description, string activityName, int initialPauseDuration, int finalPauseDuration, string endingMessage, int breathIn, int breathOut) : base(duration, description, activityName, initialPauseDuration, finalPauseDuration, endingMessage)
+    public BreathingActivity() : base("Breathing Activity", "This activity helps you relax by guiding you through slow breathing exercises. Focus on your breath.")
     {
-        _breatheOutSeconds = breathOut;
-        _breathInSeconds = breathIn;
     }
 
-    public void StartBreathingActivity()
+    public void RunBreathingActivity()
     {
-        StartActivity(_activityName, _description);
+        RunActivityParentStart();
+        SimulateBreathing();
+        RunActivityParentEnd();
+    }
 
-        int breathCount = _duration / (_breathInSeconds + _breatheOutSeconds);
-        Console.Clear();
-        Console.WriteLine("Get ready to start!");
-        InitialPause();
-        for (int i = 0; i < breathCount; i++)
+    private void SimulateBreathing()
+    {
+        int totalDurationInSeconds = GetUserSessionLengthInput();
+        int breatheInDuration = 5;
+        int breatheOutDuration = 5;
+        int intervalTime = breatheInDuration + breatheOutDuration;
+
+        int intervals = totalDurationInSeconds / intervalTime;
+
+        for (int i = 0; i < intervals; i++)
         {
-            Console.WriteLine("Breath in...");
-            Countdown(_breathInSeconds);
-            Console.WriteLine("Breath out...");
-            Countdown(_breatheOutSeconds);
+            Console.WriteLine("Breathe in...");
+            CountDownTimer(breatheInDuration);
+
+            Console.WriteLine("Breathe out...");
+            CountDownTimer(breatheOutDuration);
         }
-        DisplayEndingMessage(_activityName);
     }
 
-    public void Countdown(int seconds)
+    private void CountDownTimer(int duration)
     {
-        for (int i = seconds; i >= 1; i--)
+        for (int i = duration; i > 0; i--)
         {
-            Console.Write(i + "...");
-            System.Threading.Thread.Sleep(1000);
+            Console.Write(i);
+            Thread.Sleep(1000);
+            Console.Write("\b \b");
         }
         Console.WriteLine();
     }
