@@ -1,10 +1,12 @@
-using System;
+namespace FinalProject
+{
+    using System;
 
 namespace FinalProject
 {
-    class Program
+    class Menue
     {
-        static void Main(string[] args)
+        static void ManagerLogin(string[] args)
         {
             // Prompting the user to create a username and password for the manager
             Console.WriteLine("Create a username for the manager:");
@@ -94,4 +96,6 @@ namespace FinalProject
             }
         }
     }
+}
+
 }
