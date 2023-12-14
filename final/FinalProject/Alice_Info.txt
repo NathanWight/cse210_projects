@@ -1,0 +1,6 @@
+12/13/2023 4:27:18 PM: Tenant Information
+Tenant Name: Alice
+Apartment Number: 0
+Charges:
+Utility charges: $50
+

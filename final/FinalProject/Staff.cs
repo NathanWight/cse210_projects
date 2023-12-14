@@ -6,16 +6,15 @@ namespace FinalProject
     {
         public int StaffID { get; private set; }
         public string Role { get; set; }
-        // Other properties for contact information, etc.
-
+        
+        private FileManager fileManager;
         public Staff(string name, int staffID) : base(name)
         {
             StaffID = staffID;
+            this.fileManager = new FileManager();
         }
 
-        public Staff(string name) : base(name)
-        {
-        }
+        
 
 
         public void CompleteMaintenanceRequest(MaintenanceRequest request, string details)
@@ -26,6 +25,8 @@ namespace FinalProject
                 SaveMaintenanceDetails(request, details);
                 SaveTenantMaintenanceDetails(request);
                 Console.WriteLine($"Maintenance request completed by {Name} for '{request.Issue}'.");
+                  fileManager.SaveMaintenanceRequest(request.Requester.Name, details);
+            //fileManager.SaveTenantCharges(request.Requester.Name, amount, description);
             }
             else
             {
@@ -67,5 +68,8 @@ namespace FinalProject
                 }
             }
         }
+
+         
     }
+
 }

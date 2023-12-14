@@ -1,0 +1,6 @@
+12/13/2023 4:27:18 PM: Tenant Information
+Tenant Name: Bob
+Apartment Number: 0
+Charges:
+Late rent fee: $75
+

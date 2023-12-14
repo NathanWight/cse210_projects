@@ -1,43 +1,34 @@
 namespace FinalProject
 {
-    using System;
-
-namespace FinalProject
-{
-    class Menue
+    class Menu
     {
-        static void ManagerLogin(string[] args)
+    
+
+        private Manager manager;
+        private Staff staff;
+        private ApartmentManager ApartmentManager;
+
+        public Menu()
         {
-            // Prompting the user to create a username and password for the manager
-            Console.WriteLine("Create a username for the manager:");
-            string username = Console.ReadLine();
 
-            Console.WriteLine("Create a password for the manager:");
-            string password = Console.ReadLine();
 
-            // Creating a manager with the provided username and password
-            Manager manager = new Manager(username, password.GetHashCode()); // Using password hash for simplicity
+        }
 
-            // Manager authentication
-            Console.WriteLine("\nLogin as Manager:");
-            Console.WriteLine("Enter username:");
-            string inputUsername = Console.ReadLine();
+        public void StartMenu()
+        {
+        
+            bool isLoggedIn = true; // Assuming the user is already logged in for demonstration purposes
 
-            Console.WriteLine("Enter password:");
-            string inputPassword = Console.ReadLine();
-
-          bool isManagerLoggedIn = true; // For demonstration purposes, assuming manager is already logged in
-
-            while (isManagerLoggedIn)
+            while (isLoggedIn)
             {
-                // Manager options
-                Console.WriteLine("\nManager Options:");
+                Console.WriteLine("\nOptions:");
                 Console.WriteLine("1. Add Tenant to Apartment");
                 Console.WriteLine("2. Evict Tenant from Apartment");
                 Console.WriteLine("3. Add Charges to Tenant");
                 Console.WriteLine("4. Save Tenant Information to File");
-                Console.WriteLine("5. Sign out");
-                Console.WriteLine("Enter your choice (1-5):");
+                Console.WriteLine("5. Complete Maintenance Request");
+                Console.WriteLine("6. Sign out");
+                Console.WriteLine("Enter your choice (1-6):");
 
                 int choice;
                 if (int.TryParse(Console.ReadLine(), out choice))
@@ -45,43 +36,73 @@ namespace FinalProject
                     switch (choice)
                     {
                         case 1:
-                            // Add tenant to an apartment
                             Console.WriteLine("Enter tenant name:");
                             string tenantName = Console.ReadLine();
-                            Console.WriteLine("Enter tenant Apartment number:");
+                            Console.WriteLine("Enter tenant apartment number:");
                             string apartmentNumber = Console.ReadLine();
-                            // Add logic to create tenant and add to apartment
+                            Apartment apartmentToAddTenant = ApartmentManager.GetApartmentByNumber(apartmentNumber);
+                            if (apartmentToAddTenant != null)
+                            {
+                                // Create a Tenant object and pass it to RentToNewTenant method
+                                Tenant newTenant = new Tenant(tenantName); // Assuming Tenant constructor requires a name
+                                manager.RentToNewTenant(apartmentToAddTenant, newTenant);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Apartment not found.");
+                            }
                             break;
-
                         case 2:
-                            // Evict a tenant from an apartment
-                            Console.WriteLine("Enter tenant Apartment number:");
+                            Console.WriteLine("Enter tenant apartment number:");
                             string evictionApartmentNumber = Console.ReadLine();
-                            // Add logic to evict tenant from apartment
+                            Apartment apartmentToEvict = ApartmentManager.GetApartmentByNumber(evictionApartmentNumber);
+                            manager.EvictTenant(apartmentToEvict); // Manager's functionality
                             break;
 
                         case 3:
-                            // Add charges to a tenant's account
-                            Console.WriteLine("Enter tenant name:");
-                            string tenantNameForCharges = Console.ReadLine();
-                            Console.WriteLine("Enter charge amount:");
-                            decimal chargeAmount = decimal.Parse(Console.ReadLine());
-                            Console.WriteLine("Enter charge description:");
-                            string chargeDescription = Console.ReadLine();
-                            // Add logic to add charges to tenant's account
+                            Console.WriteLine("Enter tenant apartment number:");
+                            string apartmentNumberForCharges = Console.ReadLine();
+                            Apartment apartmentForCharges = ApartmentManager.GetApartmentByNumber(apartmentNumberForCharges);
+                            if (apartmentForCharges != null && apartmentForCharges.CurrentTenant != null)
+                            {
+                                Console.WriteLine("Enter charge amount:");
+                                decimal chargeAmount = decimal.Parse(Console.ReadLine());
+                                Console.WriteLine("Enter charge description:");
+                                string chargeDescription = Console.ReadLine();
+                                manager.AddChargesToTenant(apartmentForCharges.CurrentTenant, chargeAmount, chargeDescription);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Apartment not found or no tenant in the apartment.");
+                            }
                             break;
+
 
                         case 4:
-                            // Save tenant information to file
-                            Console.WriteLine("Enter tenant Apartment number:");
+                            Console.WriteLine("Enter tenant apartment number:");
                             string saveApartmentNumber = Console.ReadLine();
-                            // Add logic to save tenant information to file
+                            Apartment apartmentToSaveInfo = ApartmentManager.GetApartmentByNumber(saveApartmentNumber);
+                            if (apartmentToSaveInfo != null && apartmentToSaveInfo.CurrentTenant != null)
+                            {
+                                Manager.SaveTenantInformation(apartmentToSaveInfo.CurrentTenant);
+                            }
+                            else
+                            {
+                                Console.WriteLine("No tenant found in the specified apartment.");
+                            }
                             break;
 
+
                         case 5:
-                            // Sign out
-                            isManagerLoggedIn = false;
-                            Console.WriteLine("Manager signed out.");
+                            Console.WriteLine("Enter maintenance request details:");
+                            string maintenanceDetails = Console.ReadLine();
+                            MaintenanceRequest request = new(); // Create or retrieve the MaintenanceRequest object
+                            staff.CompleteMaintenanceRequest(request, maintenanceDetails);
+                            break;
+
+                        case 6:
+                            isLoggedIn = false;
+                            Console.WriteLine("Signed out.");
                             break;
 
                         default:
@@ -96,6 +117,4 @@ namespace FinalProject
             }
         }
     }
-}
-
 }

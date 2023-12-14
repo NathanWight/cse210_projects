@@ -1,36 +1,39 @@
-
 namespace FinalProject;
+        public class Tenant : Person
+    {
+        private FileManager fileManager;
+        public int ApartmentNumber { get; protected set; }
+        public List<FinancialTransaction> Charges { get; private set; }
+        private List<MaintenanceRequest> maintenanceRequests;
+         private string apartmentDataFile = "ApartmentData.txt";
 
-public class Tenant : Person
+        public Tenant(string name) : base(name)
+        {
+            maintenanceRequests = new List<MaintenanceRequest>();
+            Charges = new List<FinancialTransaction>(); // Initialize Charges list
+            this.fileManager = new FileManager();
+        }
+
+         public List<MaintenanceRequest> GetMaintenanceRequests()
+        {
+            return maintenanceRequests;
+        }
+
+       public void SubmitMaintenanceRequest(string apartmentNumber, string issue)
 {
-    public string ApartmentNumber { get; private set; }
-    
-    public List<FinancialTransaction> Charges { get; private set; }
-
-
-
-    private List<MaintenanceRequest> maintenanceRequests;
-    
-
-    public Tenant(string name) : base(name)
+    Apartment apartment = new(apartmentNumber);
+    if (apartment != null)
     {
-        maintenanceRequests = new List<MaintenanceRequest>();
-       
+        MaintenanceRequest request = new MaintenanceRequest(issue, this);
+        apartment.AddMaintenanceRequest(request);
+        maintenanceRequests.Add(request);
+        fileManager.SaveMaintenanceRequest(Name, issue); // Save the request to the tenant's file
     }
-
-    public void SubmitMaintenanceRequest(Apartment apartment, string issue)
+    else
     {
-        if (apartment != null)
-        {
-            MaintenanceRequest request = new MaintenanceRequest(issue, this);
-            apartment.AddMaintenanceRequest(request);
-            maintenanceRequests.Add(request);
-        }
-        else
-        {
-            Console.WriteLine("Invalid apartment.");
-        }
+        Console.WriteLine("Invalid apartment.");
     }
+}
 
     public void ViewMaintenanceRequests()
     {
@@ -43,9 +46,10 @@ public class Tenant : Person
     }
 
     public void ViewApartmentDetails()
-    {
-        Console.WriteLine($"Tenant: {Name}");
+    {  
         Console.WriteLine($"Apartment Number: {ApartmentNumber}");
+        Console.WriteLine($"Tenant: {Name}");
+        
     }
     public void AddCharges(decimal amount, string description)
         {
@@ -62,6 +66,7 @@ public class Tenant : Person
                     ReceiptConfirmation = "N/A", // Confirmation can be set later
                     PurposeDescription = description
                 });
+                fileManager.SaveTenantCharges(Name, amount, description);
 
                 Console.WriteLine($"Charges added for '{description}' - ${amount}");
             }
@@ -70,7 +75,7 @@ public class Tenant : Person
                 Console.WriteLine("Invalid charge amount.");
             }
         }
-        }
-    
 
-
+        
+    }
+        
