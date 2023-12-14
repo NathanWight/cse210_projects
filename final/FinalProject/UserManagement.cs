@@ -87,7 +87,7 @@ namespace FinalProject
             // Access your data source to retrieve tenant details based on username
             // This can be fetching data from a database, a file, etc.
 
-            // For now, let's assume a simple implementation using the tenants dictionary
+           
             if (tenants.ContainsKey(username))
             {
                 // Create a Tenant object using the retrieved username

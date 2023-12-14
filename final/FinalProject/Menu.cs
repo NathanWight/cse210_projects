@@ -17,7 +17,7 @@ namespace FinalProject
         public void StartMenu()
         {
         
-            bool isLoggedIn = true; // Assuming the user is already logged in for demonstration purposes
+            bool isLoggedIn = true; 
 
             while (isLoggedIn)
             {
@@ -44,7 +44,7 @@ namespace FinalProject
                             if (apartmentToAddTenant != null)
                             {
                                 // Create a Tenant object and pass it to RentToNewTenant method
-                                Tenant newTenant = new Tenant(tenantName); // Assuming Tenant constructor requires a name
+                                Tenant newTenant = new Tenant(tenantName); 
                                 manager.RentToNewTenant(apartmentToAddTenant, newTenant);
                             }
                             else

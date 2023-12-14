@@ -86,7 +86,7 @@ namespace FinalProject
 
         private void ShowTenantMenu(string username)
         {
-            Tenant tenant = new Tenant(username); // Assuming a tenant instance is created
+            Tenant tenant = new Tenant(username); 
 
             while (true)
             {

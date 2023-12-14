@@ -1,12 +1,11 @@
   namespace FinalProject;
   public class ApartmentManager
     {
-        private static List<Apartment> apartments = new List<Apartment>();
+    public static List<Apartment> Apartments { get; set; } = new List<Apartment>();
 
-
-        public static void AddApartment(Apartment apartment)
+    public static void AddApartment(Apartment apartment)
         {
-            apartments.Add(apartment);
+            Apartments.Add(apartment);
             
         }
         
@@ -15,6 +14,6 @@
        public static Apartment GetApartmentByNumber(string apartmentNumber)
         {
             // Find the apartment by its number
-            return apartments.Find(apartment => apartment.ApartmentNumber == apartmentNumber);
+            return Apartments.Find(apartment => apartment.ApartmentNumber == apartmentNumber);
     }
     }
